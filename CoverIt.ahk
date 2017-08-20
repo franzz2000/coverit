@@ -28,7 +28,7 @@ folder_path := A_WorkingDir . "\Screenshots\"
 index :=2
 
 seleccionaIdioma(A_Language)
-;seleccionaIdioma(0407)
+
 gosub, CreaMenus
     
     Gui, pixel: -Caption -Resize +LastFound
