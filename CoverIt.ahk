@@ -28,21 +28,22 @@ folder_path := A_WorkingDir . "\Screenshots\"
 index :=2
 	
     
-	Menu, MyMenu, Add, Nueva Ventana, OpenWindow
-	Menu, MyMenu, Add, Cerrar Ventana, MenuHandler
+	Menu, MyMenu, Add, Nuevo recuadro, OpenWindow
+	Menu, MyMenu, Add, Cerrar recuadro, MenuHandler
     Menu, MyMenu, Add
     Menu, MyMenu, Add, Cambiar color, MenuHandler
     Menu, MyMenu, Add, Intercambia transparencia, MenuHandler
     Menu, MyMenu, Add
     Menu, MyMenu, Add, Pixelar, MenuHandler
-    Menu, MyMenu, Add, Cambiar Tamaño pixel, changePixelSize
+    Menu, MyMenu, Add, Cambiar Tamaño de pixel, changePixelSize
     Menu, MyMenu, Add
 	Menu, MyMenu, Add, Salir, MenuHandler
 	
     Menu, tray, NoStandard
-    Menu, tray, add, Cambiar tamaño pixelado, changePixelSize ;Cambia el valor del pixelado
-	;Menu, tray, add  ; Creates a separator line.
-    Menu, tray, add, Nueva ventana, OpenWindow  ; Creates a new menu item.
+    Menu, tray, add, Nuevo recuadro, OpenWindow  ; Creates a new menu item.
+	Menu, tray, add  ; Creates a separator line.
+    Menu, tray, add, Cambiar tamaño de pixel, changePixelSize ;Cambia el valor del pixelado
+	Menu, tray, add  ; Creates a separator line.
     Menu, tray, add, Salir, SalirApp ;Sale de la aplicación
 	gosub, OpenWindow
     
@@ -55,7 +56,7 @@ MenuHandler:
   WinGetTitle, VentanaActiva, A
   if (A_ThisMenuItem == "Salir") {
     gosub, SalirApp
-  } else If (A_ThisMenuItem == "Cerrar Ventana") {
+  } else If (A_ThisMenuItem == "Cerrar recuadro") {
 	  ;PostMessage, 0x112, 0xF060,,, A
       Gui, %VentanaActiva%:Destroy
       fichero := file%VentanaActiva%
@@ -66,7 +67,8 @@ MenuHandler:
 		MouseGetPos X, Y 
 		PixelGetColor Color, %X%, %Y%, RGB
 		Gui, %VentanaActiva%:Color, %Color%
-        GuiControl,, MyPicture
+        GuiControl,%VentanaActiva%:, MyPicture
+        Gui, %VentanaActiva%:+Resize
 	} else if (A_ThisMenuItem == "Pixelar") {
         Pixela(VentanaActiva)
     } else if (A_ThisMenuItem == "Intercambia transparencia") {
@@ -75,7 +77,7 @@ MenuHandler:
         if Transparencia != 150
             WinSet, Transparent, 150, %VentanaActiva%
         else
-            WinSet, Transparent, 255, %VentanaActiva%
+            WinSet, Transparent, Off, %VentanaActiva%
     }
 return
 
@@ -131,6 +133,7 @@ OpenWindow:
 	Gui, %ventana_txt%:Color, Blue
     Gui, %ventana_txt%:Add, Picture, vMyPicture x0 y0
 	Gui, %ventana_txt%:Show, W100 H100, %ventana_txt%
+    WinSet, Transparent, 150, %ventana_txt%
 	ventana := ventana + 1	
 return
 

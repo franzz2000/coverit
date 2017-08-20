@@ -18,6 +18,7 @@ Pulsando el botón derecho sobre el mismo aparecen diferentes opciones.
 1. Nueva ventana: Permite crear una ventana nueva para cubrir otra parte de la pantalla
 2. Cerrar ventana: Elimina ventana seleccionada
 3. Cambiar color: Una vez seleccionado esta opción, adoptará el color situado debajo del puntero del ratón al hacer click.
-4. Pixelar: Pixela la zona debajo del recuadro con píxeles del tamaño definido.
+4. Intercambia Transparencia: Permite hacer que la ventana sea semitransparente para que poder redimensionar con mayor facilidad.
+4. Pixelar: Pixela la zona debajo del recuadro con píxeles del tamaño definido. Nota: Los recuadros pixelados no se pueden redimensionar, para poder redimensionar hay que seleccionar un color para el recuadro.
 5. Cambiar tamaño pixel: Permite cambiar el tamaño de los píxeles del recuadro seleccionado. En caso de no haberse pixelado, se pixelará.
 6. Salir: Sale del programa
