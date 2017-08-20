@@ -29,10 +29,14 @@ index :=2
 	
     
 	Menu, MyMenu, Add, Nueva Ventana, OpenWindow
-	Menu, MyMenu, Add, Cambiar color, MenuHandler
-    Menu, MyMenu, Add, Pixelar, MenuHandler
 	Menu, MyMenu, Add, Cerrar Ventana, MenuHandler
-    Menu, MyMenu, Add, Salir, MenuHandler
+    Menu, MyMenu, Add
+    Menu, MyMenu, Add, Cambiar color, MenuHandler
+    Menu, MyMenu, Add
+    Menu, MyMenu, Add, Pixelar, MenuHandler
+    Menu, MyMenu, Add, Cambiar Tamaño pixel, changePixelSize
+    Menu, MyMenu, Add
+	Menu, MyMenu, Add, Salir, MenuHandler
 	
     Menu, tray, NoStandard
     Menu, tray, add, Cambiar tamaño pixelado, changePixelSize ;Cambia el valor del pixelado
@@ -40,6 +44,10 @@ index :=2
     Menu, tray, add, Nueva ventana, OpenWindow  ; Creates a new menu item.
     Menu, tray, add, Salir, SalirApp ;Sale de la aplicación
 	gosub, OpenWindow
+    
+    Gui, pixel: -Caption -Resize +LastFound
+    Gui, pixel:add, Slider, vpixelSize range1-20 ToolTip, %pixelSize%
+    Gui, pixel:add, Button, Default gBotonOK, Ok
 return  ; End of script's auto-execute section.
 
 MenuHandler:
@@ -65,7 +73,8 @@ return
 changePixelSize:
     ;InputBox, pixelSize, Tamaño de Pixelado, Nuevo tamaño pixelado,
     pixelSizeOld := pixelSize
-    InputBox, pixelSize, Tamaño del Pixelado, Tamaño, , , , , , , , %pixelSize%
+    Gui, pixel:show
+    ;InputBox, pixelSize, Tamaño del Pixelado, Tamaño, , , , , , , , %pixelSize%
     if ErrorLevel
         pixelSize := pixelSizeOld
     else
@@ -76,6 +85,10 @@ changePixelSize:
             pixelSize := pixelSizeOld
         }
     }
+return
+
+BotonOk:
+    Gui, pixel:Submit
 return
 
 Pixela:
@@ -111,7 +124,8 @@ return
 
 WM_RBUTTONDOWN()
 {
-	Menu, MyMenu, Show 
+    If A_Gui is number
+        Menu, MyMenu, Show 
 }
 
 ; Allow moving the GUI by dragging any point in its client area.
