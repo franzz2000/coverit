@@ -21,10 +21,14 @@ pixelSize = 5
 ;Selecciona un directorio para incluir las capturas de pantalla
 Work_Dir = %temp%
 SetWorkingDir, %Work_Dir%   
-    IfNotExist Screenshots
-    FileCreateDir, Screenshots
+    IfNotExist CoverIt
+    FileCreateDir, CoverIt
 
-folder_path := A_WorkingDir . "\Screenshots\"
+folder_path := A_WorkingDir . "\CoverIt\"
+
+FileInstall, icono.png , %folder_path%icono.png, 1
+FileInstall, icono.ico, %folder_path%icono.ico, 1
+
 index :=2
 
 seleccionaIdioma(A_Language)
@@ -68,6 +72,7 @@ CreaMenus:
     Menu, tray, add  ; Creates a separator line.
     Menu, tray, add, %txt_AcercaDe%, AcercaDe
     Menu, tray, add, %txt_Salir%, SalirApp ;Sale de la aplicación
+    Menu, Tray, Icon, %folder_path%icono.ico
 	
     
     
@@ -122,9 +127,6 @@ IntercambiaTransparencia:
         WinSet, Transparent, 150, %VentanaActiva%
     else
         WinSet, Transparent, Off, %VentanaActiva%
-return
-
-AcercaDe:
 return
 
 changePixelSize:
@@ -227,7 +229,7 @@ WM_NCHITTEST(wParam, lParam)
 {
     static border_size = 6
     
-    if !A_Gui
+    if !A_Gui is number
         return
     
     WinGetPos, gX, gY, gW, gH
@@ -318,6 +320,8 @@ seleccionaIdioma(code) {
         txt_Ingles := "Inglés"
         txt_Espanol := "Español"
         txt_Idioma := "Idioma"
+        txt_Autor := "Autor: Franz Jimeno"
+        txt_Web := "http://coverit.franzjimeno.es"
         txt_AcercaDe := "Acerca de"
     } else {
         if code in %German% 
@@ -333,6 +337,8 @@ seleccionaIdioma(code) {
                 txt_Ingles := "Englisch"
                 txt_Espanol := "Spanisch"
                 txt_Idioma := "Sprache"
+                txt_Autor := "Autor: Franz Jimeno"
+                txt_Web := "http://coverit.franzjimeno.es"
                 txt_AcercaDe := "Über"
         } else {
                 txt_NuevoRecuadro := "New frame"
@@ -347,12 +353,30 @@ seleccionaIdioma(code) {
                 txt_Espanol := "Spanish"
                 txt_Idioma := "Language"
                 txt_AcercaDe := "About"
+                txt_Web := "http://coverit.franzjimeno.es"
+                txt_Autor := "Author: Franz Jimeno"
             }
         }
 }
 
+AcercaDe:
+    Gui, Acercade: -Caption -Resize +LastFound
+    Gui, AcercaDe:Add, Button, x500 y9 w20 h20 gGuiClose, X
+    Gui, AcercaDe:Add, Text, x42 y209 w50 h-40 , CoverIt
+    Gui, AcercaDe: Add, Picture, x12 y19 w110 h100 , %folder_path%\icono.png
+    Gui, AcercaDe: Font, S20 CDefault, Verdana
+    Gui, AcercaDe: Add, Text, x142 y9 w110 h30 , CoverIt
+    Gui, AcercaDe: Add, Text, x142 y49 w300 h30 , %txt_Autor%
+    Gui, AcercaDe: Font, S10 CDefault, Verdana
+    Gui, AcercaDe: Add, Text, x142 y89 w420 h40 , License: CC Attribution-ShareAlike 4.0 International
+    Gui, AcercaDe: Add, Text, x142 y120 w420 h40 , %txt_Web%
+    ; Generated using SmartGUI Creator for SciTE
+    Gui, AcercaDe: Show, w537 h155, Acerca de
+return
+
 GuiClose:
-    ExitApp
+    Gui, AcercaDe: Destroy
+return
     
 SalirApp:
   FileRemoveDir, %folder_path%, 1
