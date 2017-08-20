@@ -26,14 +26,17 @@ SetWorkingDir, %Work_Dir%
 folder_path := A_WorkingDir . "\Screenshots\"
 index :=2
 	
+    
 	Menu, MyMenu, Add, Nueva Ventana, OpenWindow
 	Menu, MyMenu, Add, Cambiar color, MenuHandler
     Menu, MyMenu, Add, Pixelar, MenuHandler
 	Menu, MyMenu, Add, Cerrar Ventana, MenuHandler
     Menu, MyMenu, Add, Salir, MenuHandler
 	
-	Menu, tray, add  ; Creates a separator line.
+    Menu, tray, NoStandard
+	;Menu, tray, add  ; Creates a separator line.
     Menu, tray, add, Nueva ventana, OpenWindow  ; Creates a new menu item.
+    Menu, tray, add, Salir, SalirApp ;Sale de la aplicación
 	gosub, OpenWindow
 return  ; End of script's auto-execute section.
 
