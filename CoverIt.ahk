@@ -72,8 +72,13 @@ return
 
 changePixelSize:
     ;InputBox, pixelSize, Tamaño de Pixelado, Nuevo tamaño pixelado,
+    SysGet, Mon, MonitorWorkArea
     pixelSizeOld := pixelSize
-    Gui, pixel:show
+    Gui, pixel:Show, 
+    Gui, pixel:+LastFound
+    hwnd := Winexist()
+    WinGetPos,ix,iy,w,h, ahk_id %hwnd%
+    WinMove, ahk_id %hwnd%,,MonRight-w,MonBottom-h
     ;InputBox, pixelSize, Tamaño del Pixelado, Tamaño, , , , , , , , %pixelSize%
     if ErrorLevel
         pixelSize := pixelSizeOld
