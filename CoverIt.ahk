@@ -32,6 +32,7 @@ index :=2
 	Menu, MyMenu, Add, Cerrar Ventana, MenuHandler
     Menu, MyMenu, Add
     Menu, MyMenu, Add, Cambiar color, MenuHandler
+    Menu, MyMenu, Add, Intercambia transparencia, MenuHandler
     Menu, MyMenu, Add
     Menu, MyMenu, Add, Pixelar, MenuHandler
     Menu, MyMenu, Add, Cambiar Tamaño pixel, changePixelSize
@@ -68,6 +69,13 @@ MenuHandler:
         GuiControl,, MyPicture
 	} else if (A_ThisMenuItem == "Pixelar") {
         Pixela(VentanaActiva)
+    } else if (A_ThisMenuItem == "Intercambia transparencia") {
+        WinGet, Transparencia, Transparent, %VentanaActiva%
+        OutputDebug, Transparencia de %VentanaActiva%: %Transparencia%
+        if Transparencia != 150
+            WinSet, Transparent, 150, %VentanaActiva%
+        else
+            WinSet, Transparent, 255, %VentanaActiva%
     }
 return
 
@@ -112,6 +120,7 @@ Pixela(VentanaActiva) {
     Gui, %VentanaActiva%: -Resize +ToolWindow +AlwaysOnTop
     GuiControl,%VentanaActiva%:, MyPicture,  %file_GUI%
     Gui,%VentanaActiva%: Show, NA
+    WinSet, Transparent, Off, %VentanaActiva%
     hwnd%VentanaActiva% := WinExist()
 }
 
