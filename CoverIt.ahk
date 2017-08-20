@@ -16,6 +16,7 @@ OnExit, SalirApp
 ;Array := Object()
 VentanaActiva = 
 ventana = 1
+pixelSize = 5
 
 ;Selecciona un directorio para incluir las capturas de pantalla
 Work_Dir = %temp%
@@ -34,6 +35,7 @@ index :=2
     Menu, MyMenu, Add, Salir, MenuHandler
 	
     Menu, tray, NoStandard
+    Menu, tray, add, Cambiar tamaño pixelado, changePixelSize ;Cambia el valor del pixelado
 	;Menu, tray, add  ; Creates a separator line.
     Menu, tray, add, Nueva ventana, OpenWindow  ; Creates a new menu item.
     Menu, tray, add, Salir, SalirApp ;Sale de la aplicación
@@ -57,6 +59,22 @@ MenuHandler:
 		Gui, %VentanaActiva%:Color, %Color%
 	} else if (A_ThisMenuItem == "Pixelar") {
         gosub, Pixela
+    }
+return
+
+changePixelSize:
+    ;InputBox, pixelSize, Tamaño de Pixelado, Nuevo tamaño pixelado,
+    pixelSizeOld := pixelSize
+    InputBox, pixelSize, Tamaño del Pixelado, Tamaño, , , , , , , , %pixelSize%
+    if ErrorLevel
+        pixelSize := pixelSizeOld
+    else
+    {
+        if pixelSize is not number
+        {
+            MsgBox, "El valor introducido no es un número"
+            pixelSize := pixelSizeOld
+        }
     }
 return
 
@@ -173,6 +191,7 @@ WM_NCHITTEST(wParam, lParam)
 }
 
 Screenshot(outfile, screen) {
+    global pixelSize
     If !pToken := Gdip_Startup()
         {
            MsgBox, 48, gdiplus error!, Gdiplus failed to start. Please ensure you have gdiplus on your system
@@ -191,7 +210,7 @@ Screenshot(outfile, screen) {
 
     ; Call Gdip_PixelateBitmap with the bitmap we retrieved earlier and the block size of the pixels
     ; The function returns the pixelated bitmap, and doesn't dispose of the original bitmap
-    Gdip_PixelateBitmap(pBitmap, pBitmapOut, 5)
+    Gdip_PixelateBitmap(pBitmap, pBitmapOut, pixelSize)
 
     Gdip_SaveBitmapToFile(pBitmapOut, outfile, 100)
     Gdip_DisposeImage(pBitmap)
