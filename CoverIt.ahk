@@ -26,59 +26,105 @@ SetWorkingDir, %Work_Dir%
 
 folder_path := A_WorkingDir . "\Screenshots\"
 index :=2
-	
-    
-	Menu, MyMenu, Add, Nuevo recuadro, OpenWindow
-	Menu, MyMenu, Add, Cerrar recuadro, MenuHandler
-    Menu, MyMenu, Add
-    Menu, MyMenu, Add, Cambiar color, MenuHandler
-    Menu, MyMenu, Add, Intercambia transparencia, MenuHandler
-    Menu, MyMenu, Add
-    Menu, MyMenu, Add, Pixelar, MenuHandler
-    Menu, MyMenu, Add, Cambiar Tamaño de pixel, changePixelSize
-    Menu, MyMenu, Add
-	Menu, MyMenu, Add, Salir, MenuHandler
-	
-    Menu, tray, NoStandard
-    Menu, tray, add, Nuevo recuadro, OpenWindow  ; Creates a new menu item.
-	Menu, tray, add  ; Creates a separator line.
-    Menu, tray, add, Cambiar tamaño de pixel, changePixelSize ;Cambia el valor del pixelado
-	Menu, tray, add  ; Creates a separator line.
-    Menu, tray, add, Salir, SalirApp ;Sale de la aplicación
-	gosub, OpenWindow
+
+seleccionaIdioma(A_Language)
+;seleccionaIdioma(0407)
+gosub, CreaMenus
     
     Gui, pixel: -Caption -Resize +LastFound
     Gui, pixel:add, Slider, vpixelSize range1-20 ToolTipBottom, %pixelSize%
     Gui, pixel:add, Button, Default gBotonOK, Ok
-return  ; End of script's auto-execute section.
 
-MenuHandler:
-  WinGetTitle, VentanaActiva, A
-  if (A_ThisMenuItem == "Salir") {
-    gosub, SalirApp
-  } else If (A_ThisMenuItem == "Cerrar recuadro") {
-	  ;PostMessage, 0x112, 0xF060,,, A
-      Gui, %VentanaActiva%:Destroy
-      fichero := file%VentanaActiva%
-      IfExist, %fichero%
-        FileDelete, %fichero%
-  } else If (A_ThisMenuItem == "Cambiar color") {
-	    KeyWait, LButton, D
-		MouseGetPos X, Y 
-		PixelGetColor Color, %X%, %Y%, RGB
-		Gui, %VentanaActiva%:Color, %Color%
-        GuiControl,%VentanaActiva%:, MyPicture
-        Gui, %VentanaActiva%:+Resize
-	} else if (A_ThisMenuItem == "Pixelar") {
-        Pixela(VentanaActiva)
-    } else if (A_ThisMenuItem == "Intercambia transparencia") {
-        WinGet, Transparencia, Transparent, %VentanaActiva%
-        OutputDebug, Transparencia de %VentanaActiva%: %Transparencia%
-        if Transparencia != 150
-            WinSet, Transparent, 150, %VentanaActiva%
-        else
-            WinSet, Transparent, Off, %VentanaActiva%
-    }
+gosub, OpenWindow
+return
+
+CreaMenus:
+    if Handle := MenuGetHandle("MyMenu")
+        Menu, MyMenu, DeleteAll
+	Menu, MyMenu, Add, %txt_NuevoRecuadro%, OpenWindow
+    Menu, MyMenu, Add, %txt_CerrarRecuadro%, CerrarRecuadro
+    Menu, MyMenu, Add
+    Menu, MyMenu, Add, %txt_CambiarColor%, CambiarColor
+    Menu, MyMenu, Add, %txt_IntercambiaTransparencia%, IntercambiaTransparencia
+    Menu, MyMenu, Add
+    Menu, MyMenu, Add, %txt_Pixelar%, Pixelar
+    Menu, MyMenu, Add, %txt_CambiarPixel%, changePixelSize
+    Menu, MyMenu, Add
+	Menu, MyMenu, Add, %txt_Salir%, SalirApp
+    
+    if Handle := MenuGetHandle("MyLang")
+        Menu, MyLang, DeleteAll
+    Menu, MyLang, Add, %txt_Espanol%, ChangeSpanish
+    Menu, MyLang, Add, %txt_Aleman%, ChangeGerman
+    Menu, MyLang, Add, %txt_Ingles%, ChangeEnglish
+	
+    Menu, tray, NoStandard
+    Menu, tray, DeleteAll
+    Menu, tray, add, %txt_NuevoRecuadro%, OpenWindow  ; Creates a new menu item.
+	Menu, tray, add  ; Creates a separator line.
+    Menu, tray, add, %txt_CambiarPixel%, changePixelSize ;Cambia el valor del pixelado
+	Menu, tray, add  ; Creates a separator line.
+    Menu, tray, add, %txt_Idioma%, :MyLang
+    Menu, tray, add  ; Creates a separator line.
+    Menu, tray, add, %txt_AcercaDe%, AcercaDe
+    Menu, tray, add, %txt_Salir%, SalirApp ;Sale de la aplicación
+	
+    
+    
+return  
+
+;Item seleccionad de un menú: A_ThisMenuItem
+ChangeSpanish:
+    seleccionaIdioma("0c0a")
+    gosub, CreaMenus
+return
+
+ChangeGerman:
+    seleccionaIdioma("0407")
+    gosub, CreaMenus
+return
+
+ChangeEnglish:
+    seleccionaIdioma("0409")
+    gosub, CreaMenus
+return
+
+
+CerrarRecuadro:
+    ;PostMessage, 0x112, 0xF060,,, A
+    WinGetTitle, VentanaActiva, A
+    Gui, %VentanaActiva%:Destroy
+    fichero := file%VentanaActiva%
+    IfExist, %fichero%
+    FileDelete, %fichero%
+return
+
+CambiarColor:
+    WinGetTitle, VentanaActiva, A
+    KeyWait, LButton, D
+    MouseGetPos X, Y 
+    PixelGetColor Color, %X%, %Y%, RGB
+    Gui, %VentanaActiva%:Color, %Color%
+    GuiControl,%VentanaActiva%:, MyPicture
+    Gui, %VentanaActiva%:+Resize
+return
+
+Pixelar:
+    WinGetTitle, VentanaActiva, A
+    Pixela(VentanaActiva)
+return
+
+IntercambiaTransparencia:
+    WinGetTitle, VentanaActiva, A
+    WinGet, Transparencia, Transparent, %VentanaActiva%
+    OutputDebug, Transparencia de %VentanaActiva%: %Transparencia%
+    if Transparencia != 150
+        WinSet, Transparent, 150, %VentanaActiva%
+    else
+        WinSet, Transparent, Off, %VentanaActiva%
+return
+
+AcercaDe:
 return
 
 changePixelSize:
@@ -250,6 +296,59 @@ A_Now_Format(raw){
    RegExMatch(raw,"^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})", d)
    date:=d1 "-" d2 "-" d3  " " d4 "-" d5 "-" d6
    return date
+}
+
+seleccionaIdioma(code) {
+    global ;txt_NuevoRecuadro, txt_CerrarRecuadro, txt_CambiarColor, txt_IntercambiaTransparencia, txt_Pixelar, txt_CambiarPixel, txt_Salir, txt_Acercade
+    
+    OutputDebug, %code%
+    Spanish = 040a,080a,0c0a,100a,140a,180a,1c0a,200a,240a,280a,2c0a,300a,340a,380a,3c0a,400a,440a,480a,4c0a,500a
+    German = 0407,0807,0c07,1007,1407
+
+    if code in %Spanish%
+    {
+        txt_NuevoRecuadro := "Nuevo recuadro"
+        txt_CerrarRecuadro := "Cerrar recuadro"
+        txt_CambiarColor := "Cambiar color"
+        txt_IntercambiaTransparencia := "Intercambia transparencia"
+        txt_Pixelar := "Pixelar"
+        txt_CambiarPixel := "Cambiar tamaño de pixel"
+        txt_Salir := "Salir"
+        txt_Aleman := "Aleman"
+        txt_Ingles := "Inglés"
+        txt_Espanol := "Español"
+        txt_Idioma := "Idioma"
+        txt_AcercaDe := "Acerca de"
+    } else {
+        if code in %German% 
+        {
+                txt_NuevoRecuadro := "Neuer Kasten"
+                txt_CerrarRecuadro := "Kasten schliesen"
+                txt_CambiarColor := "Farbe ändern"
+                txt_IntercambiaTransparencia := "Durchsichtigkeit ändern"
+                txt_Pixelar := "Pixelieren"
+                txt_CambiarPixel := "Pixel Größe ändern"
+                txt_Salir := "Schließen"
+                txt_Aleman := "Deutsch"
+                txt_Ingles := "Englisch"
+                txt_Espanol := "Spanisch"
+                txt_Idioma := "Sprache"
+                txt_AcercaDe := "Über"
+        } else {
+                txt_NuevoRecuadro := "New frame"
+                txt_CerrarRecuadro := "Close frame"
+                txt_CambiarColor := "Change color"
+                txt_IntercambiaTransparencia := "Toggle transparency"
+                txt_Pixelar := "Pixelate"
+                txt_CambiarPixel := "Change pixel size"
+                txt_Salir := "Exit"
+                txt_Aleman := "German"
+                txt_Ingles := "English"
+                txt_Espanol := "Spanish"
+                txt_Idioma := "Language"
+                txt_AcercaDe := "About"
+            }
+        }
 }
 
 GuiClose:
