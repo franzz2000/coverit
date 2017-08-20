@@ -46,7 +46,7 @@ index :=2
 	gosub, OpenWindow
     
     Gui, pixel: -Caption -Resize +LastFound
-    Gui, pixel:add, Slider, vpixelSize range1-20 ToolTip, %pixelSize%
+    Gui, pixel:add, Slider, vpixelSize range1-20 ToolTipBottom, %pixelSize%
     Gui, pixel:add, Button, Default gBotonOK, Ok
 return  ; End of script's auto-execute section.
 
@@ -73,24 +73,20 @@ return
 
 changePixelSize:
     WinGetTitle, VentanaActiva, A
-    ;InputBox, pixelSize, Tamaño de Pixelado, Nuevo tamaño pixelado,
     SysGet, Mon, MonitorWorkArea
     pixelSizeOld := pixelSize
     Gui, pixel:Show, 
     Gui, pixel:+LastFound
     hwnd := Winexist()
-    WinGetPos,ix,iy,w,h, ahk_id %hwnd%
-    WinMove, ahk_id %hwnd%,,MonRight-w,MonBottom-h
-    ;InputBox, pixelSize, Tamaño del Pixelado, Tamaño, , , , , , , , %pixelSize%
-    if ErrorLevel
-        pixelSize := pixelSizeOld
-    else
+    if VentanaActiva
     {
-        if pixelSize is not number
-        {
-            MsgBox, "El valor introducido no es un número"
-            pixelSize := pixelSizeOld
-        }
+        WinGetPos,ix,iy,w,h, %VentanaActiva%
+        WinMove, ahk_id %hwnd%,,ix,iy+h
+    } else {
+        WinGetTitle, VentanaSlider, A
+        WinGetPos,ix,iy,w,h, %VentanaSlider%
+        OutputDebug, Ancho: %w% de %hwnd%
+        WinMove, ahk_id %hwnd%,,MonRight-w,MonBottom-h
     }
 return
 
@@ -101,8 +97,7 @@ BotonOk:
 return
 
 Pixela(VentanaActiva) {
-    global MyPicture
-    ;WinGetTitle, VentanaActiva, A
+    global folder_path
     WinGetPos, x1, y1, w1, h1, %VentanaActiva%
     
     Gui, %VentanaActiva%:Hide
@@ -114,11 +109,8 @@ Pixela(VentanaActiva) {
     file_GUI:=file%VentanaActiva%
     sleep 300
     Screenshot(file_GUI,screen)
-    ;sleep 500
     Gui, %VentanaActiva%: -Resize +ToolWindow +AlwaysOnTop
-    ;Gui, %VentanaActiva%: -Caption +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
-    
-	GuiControl,, MyPicture ,  %file_GUI%
+    GuiControl,%VentanaActiva%:, MyPicture,  %file_GUI%
     Gui,%VentanaActiva%: Show, NA
     hwnd%VentanaActiva% := WinExist()
 }
