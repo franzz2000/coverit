@@ -65,12 +65,14 @@ MenuHandler:
 		MouseGetPos X, Y 
 		PixelGetColor Color, %X%, %Y%, RGB
 		Gui, %VentanaActiva%:Color, %Color%
+        GuiControl,, MyPicture
 	} else if (A_ThisMenuItem == "Pixelar") {
-        gosub, Pixela
+        Pixela(VentanaActiva)
     }
 return
 
 changePixelSize:
+    WinGetTitle, VentanaActiva, A
     ;InputBox, pixelSize, Tamaño de Pixelado, Nuevo tamaño pixelado,
     SysGet, Mon, MonitorWorkArea
     pixelSizeOld := pixelSize
@@ -94,11 +96,14 @@ return
 
 BotonOk:
     Gui, pixel:Submit
+    if VentanaActiva
+        Pixela(VentanaActiva)
 return
 
-Pixela:
-    WinGetTitle, VentanaActiva, A
-    WinGetPos, x1, y1, w1, h1, A
+Pixela(VentanaActiva) {
+    global MyPicture
+    ;WinGetTitle, VentanaActiva, A
+    WinGetPos, x1, y1, w1, h1, %VentanaActiva%
     
     Gui, %VentanaActiva%:Hide
     
@@ -112,17 +117,18 @@ Pixela:
     ;sleep 500
     Gui, %VentanaActiva%: -Resize +ToolWindow +AlwaysOnTop
     ;Gui, %VentanaActiva%: -Caption +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
-	Gui,%VentanaActiva%: Add, Picture, x0 y0  ,  %file_GUI%
+    
+	GuiControl,, MyPicture ,  %file_GUI%
     Gui,%VentanaActiva%: Show, NA
     hwnd%VentanaActiva% := WinExist()
-return
+}
 
 OpenWindow:
 	ventana_txt := "" + ventana
 	Gui, %ventana_txt%:New
-	
     Gui, %ventana_txt%: -Caption +Resize +LastFound +AlwaysOnTop +ToolWindow
 	Gui, %ventana_txt%:Color, Blue
+    Gui, %ventana_txt%:Add, Picture, vMyPicture x0 y0
 	Gui, %ventana_txt%:Show, W100 H100, %ventana_txt%
 	ventana := ventana + 1	
 return
