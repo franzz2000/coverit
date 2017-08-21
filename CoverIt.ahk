@@ -50,6 +50,7 @@ CreaMenus:
     Menu, MyMenu, Add
     Menu, MyMenu, Add, %txt_CambiarColor%, CambiarColor
     Menu, MyMenu, Add, %txt_IntercambiaTransparencia%, IntercambiaTransparencia
+    Menu, MyMenu, Check, %txt_IntercambiaTransparencia%
     Menu, MyMenu, Add
     Menu, MyMenu, Add, %txt_Pixelar%, Pixelar
     Menu, MyMenu, Add, %txt_CambiarPixel%, changePixelSize
@@ -124,9 +125,15 @@ IntercambiaTransparencia:
     WinGet, Transparencia, Transparent, %VentanaActiva%
     OutputDebug, Transparencia de %VentanaActiva%: %Transparencia%
     if Transparencia != 150
+    {
         WinSet, Transparent, 150, %VentanaActiva%
+        Menu, MyMenu, Check, %txt_IntercambiaTransparencia%
+    }
     else
+    {
         WinSet, Transparent, Off, %VentanaActiva%
+        Menu, MyMenu, UnCheck, %txt_IntercambiaTransparencia%
+    }
 return
 
 changePixelSize:
@@ -155,7 +162,7 @@ BotonOk:
 return
 
 Pixela(VentanaActiva) {
-    global folder_path
+    global folder_path, txt_IntercambiaTransparencia
     WinGetPos, x1, y1, w1, h1, %VentanaActiva%
     
     Gui, %VentanaActiva%:Hide
@@ -171,6 +178,9 @@ Pixela(VentanaActiva) {
     GuiControl,%VentanaActiva%:, MyPicture,  %file_GUI%
     Gui,%VentanaActiva%: Show, NA
     WinSet, Transparent, Off, %VentanaActiva%
+
+    Menu, MyMenu, UnCheck, %txt_IntercambiaTransparencia%
+    
     hwnd%VentanaActiva% := WinExist()
 }
 
@@ -312,7 +322,7 @@ seleccionaIdioma(code) {
         txt_NuevoRecuadro := "Nuevo recuadro"
         txt_CerrarRecuadro := "Cerrar recuadro"
         txt_CambiarColor := "Cambiar color"
-        txt_IntercambiaTransparencia := "Intercambia transparencia"
+        txt_IntercambiaTransparencia := "Transparente"
         txt_Pixelar := "Pixelar"
         txt_CambiarPixel := "Cambiar tamaño de pixel"
         txt_Salir := "Salir"
@@ -329,7 +339,7 @@ seleccionaIdioma(code) {
                 txt_NuevoRecuadro := "Neuer Kasten"
                 txt_CerrarRecuadro := "Kasten schliesen"
                 txt_CambiarColor := "Farbe ändern"
-                txt_IntercambiaTransparencia := "Durchsichtigkeit ändern"
+                txt_IntercambiaTransparencia := "Durchsichtig"
                 txt_Pixelar := "Pixelieren"
                 txt_CambiarPixel := "Pixel Größe ändern"
                 txt_Salir := "Schließen"
@@ -344,7 +354,7 @@ seleccionaIdioma(code) {
                 txt_NuevoRecuadro := "New frame"
                 txt_CerrarRecuadro := "Close frame"
                 txt_CambiarColor := "Change color"
-                txt_IntercambiaTransparencia := "Toggle transparency"
+                txt_IntercambiaTransparencia := "Transparent"
                 txt_Pixelar := "Pixelate"
                 txt_CambiarPixel := "Change pixel size"
                 txt_Salir := "Exit"
