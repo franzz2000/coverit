@@ -17,6 +17,7 @@ OnExit, SalirApp
 VentanaActiva = 
 ventana = 1
 pixelSize = 5
+LMouseLock := false
 
 ;Selecciona un directorio para incluir las capturas de pantalla
 Work_Dir = %temp%
@@ -107,7 +108,9 @@ return
 
 CambiarColor:
     WinGetTitle, VentanaActiva, A
+    LMouseLock := true
     KeyWait, LButton, D
+    LMouseLock := false
     MouseGetPos X, Y 
     PixelGetColor Color, %X%, %Y%, RGB
     Gui, %VentanaActiva%:Color, %Color%
@@ -204,6 +207,7 @@ WM_RBUTTONDOWN()
 ; Allow moving the GUI by dragging any point in its client area.
 WM_LBUTTONDOWN()
 {
+    OutputDebug, % A_Gui
     if A_Gui
         PostMessage, 0xA1, 2 ; WM_NCLBUTTONDOWN
 }
@@ -399,3 +403,6 @@ return
 ^!a::
   gosub, OpenWindow
 return
+
+#If LMouseLock
+LButton::return
