@@ -51,7 +51,7 @@ CreaMenus:
     Menu, MyMenu, Add
     Menu, MyMenu, Add, %txt_CambiarColor%, CambiarColor
     Menu, MyMenu, Add, %txt_IntercambiaTransparencia%, IntercambiaTransparencia
-    Menu, MyMenu, Check, %txt_IntercambiaTransparencia%
+    ;Menu, MyMenu, Check, %txt_IntercambiaTransparencia%
     Menu, MyMenu, Add
     Menu, MyMenu, Add, %txt_Pixelar%, Pixelar
     Menu, MyMenu, Add, %txt_CambiarPixel%, changePixelSize
@@ -130,12 +130,12 @@ IntercambiaTransparencia:
     if Transparencia != 150
     {
         WinSet, Transparent, 150, %VentanaActiva%
-        Menu, MyMenu, Check, %txt_IntercambiaTransparencia%
+        ;Menu, MyMenu, Check, %txt_IntercambiaTransparencia%
     }
     else
     {
         WinSet, Transparent, Off, %VentanaActiva%
-        Menu, MyMenu, UnCheck, %txt_IntercambiaTransparencia%
+        ;Menu, MyMenu, UnCheck, %txt_IntercambiaTransparencia%
     }
 return
 
@@ -180,9 +180,8 @@ Pixela(VentanaActiva) {
     Gui, %VentanaActiva%: -Resize +ToolWindow +AlwaysOnTop
     GuiControl,%VentanaActiva%:, MyPicture,  %file_GUI%
     Gui,%VentanaActiva%: Show, NA
-    WinSet, Transparent, Off, %VentanaActiva%
-
-    Menu, MyMenu, UnCheck, %txt_IntercambiaTransparencia%
+    
+    ;Menu, MyMenu, UnCheck, %txt_IntercambiaTransparencia%
     
     hwnd%VentanaActiva% := WinExist()
 }
@@ -200,8 +199,18 @@ return
 
 WM_RBUTTONDOWN()
 {
+    global txt_IntercambiaTransparencia
     If A_Gui is number
-        Menu, MyMenu, Show 
+    {
+        WinGet, Transparencia, Transparent, %A_Gui%
+        if Transparencia
+        {
+            Menu, MyMenu, Check, %txt_IntercambiaTransparencia%
+        } else {
+            Menu, MyMenu, UnCheck, %txt_IntercambiaTransparencia%
+        }
+            Menu, MyMenu, Show
+    }
 }
 
 ; Allow moving the GUI by dragging any point in its client area.
