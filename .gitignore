@@ -1,2 +1,5 @@
 *.bak
-*.exegh-pages/
+*.exe
+gh-pages/
+.DS_Store
+
