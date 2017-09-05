@@ -1,2 +1,6 @@
 *.bak
 *.exe
+*.swp
+gh-pages/
+.DS_Store
+
