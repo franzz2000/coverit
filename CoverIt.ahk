@@ -1,4 +1,5 @@
 ;IMPORTANTE Ejecutar como una aplicación de 32 bits, no funciona con 64bits
+;Versión 0.2
 #SingleInstance, Force
 #Persistent
 
@@ -13,7 +14,7 @@ OnMessage(0x86, "WM_NCACTIVATE")
 
 OnExit, SalirApp
 
-;Array := Object()
+version := "0.2"
 VentanaActiva = 
 ventana = 1
 pixelSize = 5
@@ -393,6 +394,7 @@ AcercaDe:
     Gui, AcercaDe: Font, S10 CDefault, Verdana
     Gui, AcercaDe: Add, Text, x142 y89 w420 h40 , License: CC Attribution-ShareAlike 4.0 International
     Gui, AcercaDe: Add, Text, x142 y120 w420 h40 , %txt_Web%
+    Gui, AcercaDe: Add, Text, x42 y120 w420 h40 , v. %version%
     ; Generated using SmartGUI Creator for SciTE
     Gui, AcercaDe: Show, w537 h155, Acerca de
 return
