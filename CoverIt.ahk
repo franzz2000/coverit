@@ -182,6 +182,7 @@ Pixela(VentanaActiva) {
     GuiControl,%VentanaActiva%:, MyPicture,  %file_GUI%
     Gui,%VentanaActiva%: Show, NA
     
+    WinSet, Transparent, Off, %VentanaActiva%
     ;Menu, MyMenu, UnCheck, %txt_IntercambiaTransparencia%
     
     hwnd%VentanaActiva% := WinExist()
