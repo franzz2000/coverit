@@ -1,12 +1,12 @@
-  #Basic options
-  title: Coverit
-  author: Franz Jimeno
-  email: coverit@franzjimeno.es
-  description: A program for hiding sensible information on the fly.
-  twitter_username: @franzz2000
-  github_username: franzz2000
-  
-  #Build settings
-  theme: jekyll-theme-tactile
-  
+#Basic options
+title: Coverit
+author: Franz Jimeno
+email: coverit@franzjimeno.es
+description: A program for hiding sensible information on the fly.
+twitter_username: @franzz2000
+github_username: franzz2000
+
+#Build settings
+theme: jekyll-theme-tactile
+
   
