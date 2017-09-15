@@ -8,4 +8,4 @@ A program that helps you cover sensible data when you do a live presentation of 
 ![alt text](img/captura2.png "Not Pixelated")
 ![alt text](img/captura3.png "Pixelated")
 
-You can download latest version [here](http://franzz2000.github.io/coverit/ejecutables/CoverIt-v02.exe).
+You can download latest version [here](https://github.com/franzz2000/coverit/releases/latest).
